@@ -1,4 +1,4 @@
-package com.mime.farm.util;
+package com.mime.farm.util.jdbc;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +14,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import com.alibaba.fastjson.JSON;
 import com.mime.farm.common.CustomException;
+
+
 
 public class DBUtils {
 	//数据库连接驱动
@@ -65,6 +68,68 @@ public class DBUtils {
 			throw new CustomException("创建数据库connection连接失败！");
 		}
 	}
+	
+	
+	
+	/*
+	 * 查询结果
+     * @param sql        sql文
+     * @param params    参数
+     * @param handler    结果处理集
+     * @return            返回结果集
+     */
+    public static<T> List<?> queryResult(String sql,String[] params,ResultMapper<T> handler,Class<T> c){
+        List<Map<String,Object>> results = null;
+        Connection conn = null;
+        ResultSet rs  = null;
+        PreparedStatement stmt = null;
+        try {
+        	conn = getConnection();
+        	stmt = conn.prepareStatement(sql);
+            for (int i = 0, n = (params!=null?params.length:0); i < n; i++) {
+            	stmt.setString(i, params[i]);
+            } 
+            rs = stmt.executeQuery();
+            if(rs!=null){
+                results = new ArrayList<>();     
+                String[] name = null;
+                ResultSetMetaData rsm = null;
+                while(rs.next()){
+                    if(rsm==null){
+                        rsm = rs.getMetaData();
+                        System.out.println(JSON.toJSONString(rsm));
+                        int count = rsm.getColumnCount();    
+                        System.out.println(count);
+                        name = new String[count];
+                        for(int i = 0;i<count;i++){
+                            name[i] = rsm.getColumnName(i+1);
+                        }
+                    }
+                    Map<String, Object> map = new HashMap<>();
+                    // 开始填充值
+                    for(String keys:name){
+                        map.put(keys, rs.getString(keys));
+                    }
+                    results.add(map);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }finally {
+            closeAll(rs, stmt, conn);
+        }
+        // 开始处理结合
+        List<T> lists = new ArrayList<>();
+        if(results!=null){
+            for(Map<String, Object> e:results){
+                T t = (T) handler.convert(e,c);
+                lists.add(t);
+            }
+            return lists;
+        }else{ 
+            return null;
+        }
+    }
 	
 	
 	
@@ -336,6 +401,13 @@ public class DBUtils {
             }  
         } 
 	}
+	
+	
+	
+	
+	
+	
+	
 	
 }//类结尾
 

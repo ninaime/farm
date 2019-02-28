@@ -2,20 +2,20 @@ package com.mime.farm.pojo;
 
 import java.sql.Timestamp;
 
-public class SysUser {
+public class User {
 	private Integer id;//用户编号
 	private String nikename;//显示的用户名
 	private String username;//用户名
 	private String password;//密码
-	private Integer sex;//性别\
+	private Integer sex;//性别
 	private String avatar;//头像
+	private Integer roleId;//用户状态 0正常用户  1管理员用户  2封号用户
+	private Integer userLock;//锁 0不在线 1在线
+	private Integer exp;//经验
+	private Integer gold;//金币
+	private Integer isDisable;//是否禁用
+	private String ip;//登录IP
 	private Timestamp gmtCreate;//创建时间
-	private Integer role;//用户状态 0正常用户  1管理员用户  2封号用户
-	private Integer userslock;//锁 0不在线 1在线
-	private Integer exp;
-	private Integer gold;
-	private Integer isDisable;
-	private String ip;
 	public Integer getId() {
 		return id;
 	}
@@ -52,23 +52,17 @@ public class SysUser {
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
 	}
-	public Timestamp getGmtCreate() {
-		return gmtCreate;
+	public Integer getRoleId() {
+		return roleId;
 	}
-	public void setGmtCreate(Timestamp gmtCreate) {
-		this.gmtCreate = gmtCreate;
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
 	}
-	public Integer getRole() {
-		return role;
+	public Integer getUserLock() {
+		return userLock;
 	}
-	public void setRole(Integer role) {
-		this.role = role;
-	}
-	public Integer getUserslock() {
-		return userslock;
-	}
-	public void setUserslock(Integer userslock) {
-		this.userslock = userslock;
+	public void setUserLock(Integer userLock) {
+		this.userLock = userLock;
 	}
 	public Integer getExp() {
 		return exp;
@@ -94,5 +88,12 @@ public class SysUser {
 	public void setIp(String ip) {
 		this.ip = ip;
 	}
+	public Timestamp getGmtCreate() {
+		return gmtCreate;
+	}
+	public void setGmtCreate(Timestamp gmtCreate) {
+		this.gmtCreate = gmtCreate;
+	}
+	
 	
 }
