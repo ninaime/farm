@@ -1,14 +1,11 @@
 package com.mime.farm.dao;
 
-import java.util.List;
-
-import com.mime.farm.pojo.User;
+import java.sql.Connection;
 
 /**
  * Dao层接口
  */
 public interface SysUserDao {
-	//public boolean register(String username,String password);
+	boolean register(String username,String password,Connection conn);
 	
-	public List<User> findAll();
 }

@@ -1,4 +1,4 @@
-package com.mime.farm.pojo;
+package com.mime.farm.entity;
 /**
  * 种子表
  */
